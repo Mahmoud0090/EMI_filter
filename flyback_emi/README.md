@@ -37,5 +37,3 @@ Built as a self-directed learning project to develop practical EMI filter design
 - Finalize CM choke/Y-cap values and re-verify full-band compliance
 - Document Lesson 3 with the same calculation + results format as Lessons 1-2
 
----
-*Contact: [your name / email / LinkedIn] — happy to walk through the simulation live.*

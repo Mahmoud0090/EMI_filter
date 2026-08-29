@@ -1,0 +1,206 @@
+************************************************************************************************************************
+***                                                                                                                  ***
+*** Elements Version 9.20j (x64) - 8/24/2026 9:42 PM                                                                 ***
+*** Platform: Windows 10                                                                                             ***
+*** Architecture: x64                                                                                                ***
+*** Serial Number:                                                                                                   ***
+*** User:                                                                                                            ***
+***                                                                                                                  ***
+*** TITLE:   * C:\Users\User\OneDrive\Desktop\Emi_simulations\flyback_emi\schematics\EMI for flyback converter.wxsch***
+*** NETLIST: C:\Users\User\OneDrive\Desktop\Emi_simulations\flyback_emi\schematics\design.net                        ***
+***                                                                                                                  ***
+************************************************************************************************************************
+
+********************************************************************************
+***                                                                          ***
+***                                Input Deck                                ***
+***                                                                          ***
+********************************************************************************
+
+.options bjtPSpiceSubNode=1
+.options allowdivzero=1
+.options initCondMode=2
+.options icres=0.002
+.options inhibitAttoISource=1
+#SIMETRIX
+R6 R6_P L3_N 5
+V2 V2_P 0  Sin(0 325 50 0 0)
+V1 V1_P 0 5 Pulse(0 12 0 50n 50n 4.2576922u 15.384615u)
+L2 0 L2_N 50u   
+R8 C8_N L4_N 5
+C1 V2_P C1_N 250n   
+D2 R13_N D5_N d1n4007
+X$TX2 R13_N R6_P TX2_S1P C8_N Ideal_TxTX2 pinnames: P1P P1N S1P S1N 
+.subckt Ideal_TxTX2 P1P P1N S1P S1N 
+L1 P1P P1N 10m 
+L2 S1P S1N 10m 
+K12 L1 L2 998m 
+.ends 
+L1 V2_P L1_N 50u   
+R7 C4_N CHASSIS 50
+D1 TX1_S1N D1_N D1N4148
+X$TX1 D5_N TX1_P1N 0 TX1_S1N Ideal_TxTX1 pinnames: P1P P1N S1P S1N 
+.subckt Ideal_TxTX1 P1P P1N S1P S1N 
+L1 P1P P1N 400u 
+L2 S1P S1N 1u 
+K12 L1 L2 980m 
+.ends 
+L3 L1_N L3_N 8m   
+R9 R9_P R6_P 100
+R5 C5_N CHASSIS 1K
+R4 C3_N CHASSIS 50
+R3 C1_N CHASSIS 1K
+X$Q1 TX1_P1N V1_P 0 IRF530 pinnames: D G S
+R2 D5_N C7_N 6.8k
+R13 C16_N R13_N 220
+R12 R12_P C8_N 100
+R11 TX2_S1P R11_N 220
+R1 D1_N 0 2.5
+L4 L2_N L4_N 8m   
+C5 0 C5_N 250n   
+D6 TX1_P1N C7_N D1N4148
+C4 L2_N C4_N 1u   
+D5 TX2_S1P D5_N d1n4007
+C3 L1_N C3_N 1u   
+D4 0 TX2_S1P d1n4007
+C2 D1_N 0 100u   
+D3 0 R13_N d1n4007
+C9 TX1_P1N CHASSIS 2p   
+C8 R6_P C8_N 1u   
+C7 D5_N C7_N 15n   
+C6 D5_N 0 150u   
+C17 R11_N CHASSIS 10n   
+C16 CHASSIS C16_N 10n   
+C15 TX2_S1P R12_P 10n   
+C14 R13_N R9_P 10n   
+C11 TX2_S1P CHASSIS 4.7n   
+C10 CHASSIS R13_N 4.7n   
+.tran 200m
+*.ac dec 25 1k 30000000
+.subckt IRF530 D G S
+.model mosfet NMOS( LEVEL=17 VTO=3.705 RS=0.05585 KP=4.543 RD=0.0492 TC1RD=0.031 RG=7.5 IS=1e-36 LIMIT(VDS)=(*, 100)
++ CGDMAX=1.70E-09 CGDMIN=3.00E-11 XG2CGD=0.5 XG1CGD=0.1 CBD=2.61E-10 VTCGD=0.9)
+.model diode D( IS=1.62e-12 RS=0.0147 TT=1.929e-07)
+M1 D G S S mosfet
+D1 S D Diode
+Cgs G S 6.17E-10
+.ends
+.model d1n4007  D(IS=140f RS=39m IKF=7m CJO=52p M=0.27 VJ=0.75 ISR=16n 
++ BV=1200 IBV=100u TT=7.0u)
+**************************************************************************
+* jrw 17.2.94.
+* Data from Motorola Rectifier device data DL151/D
+* D1N5400 to D1N5408
+* The data sheet on this range of diodes is scant despite their
+* ubiquitous nature. Capacitance is estimated and reverse recovery
+* has not been modelled.
+.model D1n4148 D(IS=1.6f RS=1.0 IKF=22m CJO=3p M=0.3 VJ=0.75 ISR=2.6n 
++ BV=70 TT=20n)
+**************************************************************************
+* jrw 17.2.94.
+* bav18, bav19, bav20, bav21 - DO-35
+* bas19, bas20, bas21 - SOT23
+* bav100, bav101, bav102, bav103 -SOD80C
+* Data from Philips SC01 1992
+
+********************************************************************************
+***                                                                          ***
+*** Starting Transient analysis at 9:42 PM                                   ***
+***                                                                          ***
+*** Analysis card: .tran 200m                                                ***
+***                                                                          ***
+********************************************************************************
+********************************************************************************
+***                                                                          ***
+***                            Simulation Options                            ***
+***                                                                          ***
+********************************************************************************
+RELTOL                    0.001
+ABSTOL                    1e-12
+VNTOL                     1e-06
+POINTTOL                  0.001
+TEMPERATURE               27C
+GMIN                      1e-12
+Matrix Solver             UF KLU Version 1.1
+
+
+
+********************************************************************************
+***                                                                          ***
+***                             Device parameters                            ***
+***                                                                          ***
+********************************************************************************
+Model parameters for devices of type VMOS
+=========================================
+Model:       Q1.mosfet    
+
+cbd          261p         
+cgdmax       1.7n         
+cgdmin       30p          
+is           1E-36        
+kp           4.543        
+rd           49.2m        
+rg           7.5          
+rs           55.85m       
+tc1rd        31m          
+vtcgd        900m         
+vto          3.705        
+xg1cgd       100m         
+xg2cgd       500m         
+
+
+Model parameters for devices of type Diode
+==========================================
+Model:       d1n4007      D1N4148      Q1.Diode     
+
+_ibv         100u         100p         100p         
+bv           1.2k         70           0            
+cjo          52p          3p           0            
+ikf          7m           22m          0            
+is           140f         1.6f         1.62p        
+isr          16n          2.6n         0            
+m            270m         300m         500m         
+rs           39m          1            14.7m        
+tt           7u           20n          192.9n       
+vj           750m         750m         1            
+
+
+Analysis statistics
+===================
+
+Nominal temperature = 27
+Operating temperature = 27
+Total iterations = 4.56575e+06
+Transient iterations = 4.56573e+06
+Transient timepoints = 1.24996e+06
+Accepted timepoints = 1.13775e+06
+Total analysis time = 69.265
+Transient time = 0
+Matrix reordering time = 0
+L-U decomposition time = 0
+Matrix solve time = 0
+Load time = 0
+Transient L-U decomp time = 0
+Transient solve time = 0
+Circuit build time = 0.032
+Simulator initialise time = 0
+Data write time = 0
+Convergence test time = 0
+LTE time = 0
+JI2 Iterations = 23
+Diag. GMIN stepping iterations = 0
+Junc. GMIN stepping iterations = 0
+Source stepping iterations = 0
+PTA iterations = 0
+Number of matrix fill ins = 32
+Number of initial matrix elements = 154
+Circuit equations = 45
+State vector size = 190
+Number of write buffer faults = 0
+
+Run statistics
+==============
+
+Netlist read in time = 0.031
+Total run time = 69.344 seconds
+Analysis concluded 8/24/2026 9:43 PM
